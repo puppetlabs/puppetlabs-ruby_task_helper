@@ -7,5 +7,5 @@
       "type": "String"
     }
   },
-  "files": ["ruby_task_helper/lib/task_helper.rb"]
+  "files": ["ruby_task_helper/files/task_helper.rb"]
 }

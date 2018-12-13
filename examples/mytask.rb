@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 
-require_relative '../lib/task_helper.rb'
+require_relative '../files/task_helper.rb'
 
 class MyTask < TaskHelper
   def task(name: nil, **kwargs)

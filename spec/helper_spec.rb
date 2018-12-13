@@ -1,4 +1,4 @@
-require_relative '../lib/task_helper.rb'
+require_relative '../files/task_helper.rb'
 
 class EmptyTask < TaskHelper; end
 
