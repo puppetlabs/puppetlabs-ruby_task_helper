@@ -28,7 +28,7 @@ mod 'puppetlabs-ruby_task_helper'
 Add it to your [task metadata](https://puppet.com/docs/bolt/latest/writing_tasks.html#concept-677)
 ```
 {
-  "files": ["ruby_task_helper/lib/task_helper.rb"],
+  "files": ["ruby_task_helper/files/task_helper.rb"],
   "input_method": "stdin"
 }
 ```
@@ -41,7 +41,7 @@ When writing your task include the library in your script, extend the `TaskHelpe
 ```
 #!/usr/bin/env ruby
 
-require_relative "../../ruby_task_helper/lib/task_helper.rb"
+require_relative "../../ruby_task_helper/files/task_helper.rb"
 
 class MyClass < TaskHelper
   def task(name: nil, **kwargs) 
