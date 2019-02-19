@@ -35,7 +35,7 @@ Add it to your [task metadata](https://puppet.com/docs/bolt/latest/writing_tasks
 
 ## Usage
 
-When writing your task include the library in your script, extend the `TaskHelper` module, and write the `task()` function. The `task()` function should accept its parameters as symbols, and should return a hash. The following is an example of a task that uses the library
+When writing your task include the library in your script, extend the `TaskHelper` module, and write the `task()` function. The `task()` function should accept its parameters as symbols, and should return a hash. The following is an example of a task that uses the library. All parameters will be symbolized including nested hash keys and hashes contained in arrays.
 
 `mymodule/tasks/task.rb`
 ```

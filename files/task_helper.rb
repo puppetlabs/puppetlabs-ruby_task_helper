@@ -23,12 +23,24 @@ class TaskHelper
     raise TaskHelper::Error.new(msg, 'tasklib/not-implemented')
   end
 
+  # Accepts a Data object and returns a copy with all hash keys
+  # symbolized.
+  def self.walk_keys(data)
+    if data.is_a? Hash
+      data.each_with_object({}) do |(k, v), acc|
+        v = walk_keys(v)
+        acc[k.to_sym] = v
+      end
+    elsif data.is_a? Array
+      data.map { |v| walk_keys(v) }
+    else
+      data
+    end
+  end
+
   def self.run
     input = STDIN.read
-    # Line is too long for rubocop :P
-    params = JSON.parse(input).each_with_object({}) do |(k, v), acc|
-      acc[k.to_sym] = v
-    end
+    params = walk_keys(JSON.parse(input))
 
     # This method accepts a hash of parameters to run the task, then executes
     # the task. Unhandled errors are caught and turned into an error result.
