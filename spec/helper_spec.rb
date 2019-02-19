@@ -71,8 +71,8 @@ end
 describe 'EchoTask' do
   it 'runs an echo task' do
     allow(STDIN).to receive(:read).and_return('{"name": "Lucy"}')
-    expect(EchoTask).to receive(:run).and_return('{"result":
-                                                 "Hello, my name is Lucy"}')
+    out = JSON.dump('result' => 'Hi, my name is Lucy')
+    expect(STDOUT).to receive(:print).with(out)
     EchoTask.run
   end
 end
