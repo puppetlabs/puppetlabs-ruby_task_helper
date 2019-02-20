@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## Release 0.3.0
+
+**Bugfixes**
+
+Previously only top level parameter keys were symbolized. Now nested keys are also symbolized.
+
 ## Release 0.2.0
 
 **Bugfixes**
