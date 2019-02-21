@@ -1,4 +1,5 @@
 require_relative '../files/task_helper.rb'
+require 'json'
 
 class EmptyTask < TaskHelper; end
 
@@ -13,6 +14,20 @@ end
 class EchoTask < TaskHelper
   def task(name: nil)
     { 'result': "Hi, my name is #{name}" }
+  end
+end
+
+class SymbolizeTask < TaskHelper
+  def task(params)
+    # Test that the keys have been symbolized.
+    symbols = {
+      nested_hash: params.dig(:top_level, :nested_key),
+      array_hash: params[:array_keys].first[:array_key]
+    }
+    # Return the parameters merged with the symbols for
+    # verification in test.
+    result = params.merge(symbols)
+    { 'result': JSON.dump(result) }
   end
 end
 
@@ -56,8 +71,28 @@ end
 describe 'EchoTask' do
   it 'runs an echo task' do
     allow(STDIN).to receive(:read).and_return('{"name": "Lucy"}')
-    expect(EchoTask).to receive(:run).and_return('{"result":
-                                                 "Hello, my name is Lucy"}')
+    out = JSON.dump('result' => 'Hi, my name is Lucy')
+    expect(STDOUT).to receive(:print).with(out)
     EchoTask.run
+  end
+end
+
+describe 'SymbolizeTask' do
+  it 'recieves parameters hash with symbolized keys' do
+    params = {
+      'top_level' => { 'nested_key' => 'foo' },
+      'array_keys' => [{ 'array_key' => 'bar' }]
+    }
+    # The task will only return these values if the keys
+    # are properly symbolized.
+    symbols = { nested_hash: 'foo', array_hash: 'bar' }
+    allow(STDIN).to receive(:read).and_return(JSON.dump(params))
+    # In order to verify that symbolizing keys has not corrupted
+    # the structure of the parameters the task returns the params
+    # hash it received. This is merged with the result of looking
+    # up the symbolized keys.
+    out = JSON.dump('result' => JSON.dump(params.merge(symbols)))
+    expect(STDOUT).to receive(:print).with(out)
+    SymbolizeTask.run
   end
 end
