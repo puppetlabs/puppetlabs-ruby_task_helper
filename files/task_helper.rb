@@ -1,6 +1,8 @@
 require 'json'
 
 class TaskHelper
+  attr_accessor :context
+
   class Error < RuntimeError
     attr_reader :kind, :details, :issue_code
 
@@ -46,7 +48,10 @@ class TaskHelper
     # the task. Unhandled errors are caught and turned into an error result.
     # @param [Hash] params A hash of params for the task
     # @return [Hash] The result of the task
-    result = new.task(params)
+
+    tsk = new
+    tsk.context = RemoteContext.new(params) if params.key? :_target
+    result = tsk.task(params)
 
     if result.class == Hash
       STDOUT.print JSON.generate(result)
@@ -60,5 +65,40 @@ class TaskHelper
     error = TaskHelper::Error.new(e.message, e.class.to_s, e.backtrace)
     STDOUT.print(error.to_h.to_json)
     exit 1
+  end
+
+  class RemoteContext
+    attr_reader :params
+
+    def initialize(params)
+      @transport = {}
+      @params = params
+
+      return unless params.key? :_installdir
+      add_plugin_paths(params[:_installdir])
+    end
+
+    def transport
+      require 'puppet/resource_api/transport'
+
+      @transport[target[:'remote-transport']] ||= Puppet::ResourceApi::Transport
+                                                  .connect(
+                                                    target[:'remote-transport'],
+                                                    target
+                                                  )
+    end
+
+    def target
+      @target ||= params[:_target]
+    end
+
+    private
+
+    # Syncs across anything from the module lib
+    def add_plugin_paths(install_dir)
+      Dir.glob(File.join([install_dir, '*'])).each do |mod|
+        $LOAD_PATH << File.join([mod, 'lib'])
+      end
+    end
   end
 end

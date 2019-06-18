@@ -1,5 +1,6 @@
 require_relative '../files/task_helper.rb'
 require 'json'
+require 'puppet/resource_api'
 
 class EmptyTask < TaskHelper; end
 
@@ -14,6 +15,15 @@ end
 class EchoTask < TaskHelper
   def task(name: nil)
     { 'result': "Hi, my name is #{name}" }
+  end
+end
+
+class RemoteTask < TaskHelper
+  def task(params)
+    {
+      'result':
+      "Hi, my name is #{params[:name]}, transport: #{context.transport.name}"
+    }
   end
 end
 
@@ -94,5 +104,29 @@ describe 'SymbolizeTask' do
     out = JSON.dump('result' => JSON.dump(params.merge(symbols)))
     expect(STDOUT).to receive(:print).with(out)
     SymbolizeTask.run
+  end
+end
+
+describe 'RemoteTask' do
+  let(:target) do
+    { "protocol": 'remote', "remote-transport": 'wibble' }
+  end
+  let(:input) do
+    { 'name': 'Lucy', '_target': target }
+  end
+  let(:transport) {  double('a transport') }
+
+  it 'runs an remote task' do
+    allow(STDIN).to receive(:read).and_return(input.to_json)
+    allow(Puppet::ResourceApi::Transport).to receive(:connect)
+      .with('wibble', target).and_return(transport)
+
+    allow(transport).to receive(:name).and_return('wibble_transport')
+
+    out = JSON.dump('result' =>
+      'Hi, my name is Lucy, transport: wibble_transport')
+    expect(STDOUT).to receive(:print).with(out)
+
+    RemoteTask.run
   end
 end
