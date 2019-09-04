@@ -54,11 +54,11 @@ class TaskHelper
       STDOUT.print result.to_s
     end
   rescue TaskHelper::Error => e
-    STDOUT.print(e.to_h.to_json)
+    STDOUT.print({ _error: e.to_h }.to_json)
     exit 1
   rescue StandardError => e
     error = TaskHelper::Error.new(e.message, e.class.to_s, e.backtrace)
-    STDOUT.print(error.to_h.to_json)
+    STDOUT.print({ _error: error.to_h }.to_json)
     exit 1
   end
 end

@@ -34,11 +34,13 @@ end
 describe 'EmptyTask' do
   it 'returns no method when task() is not provided' do
     allow(STDIN).to receive(:read).and_return('{"name": "Lucy"}')
-    out = '{"kind":"tasklib/not-implemented",' \
-      '"msg":"The task author must implement the `task` method in the task",' \
-      '"details":{}}'
+    msg = 'The task author must implement the `task` method in the task'
+    result = { _error:
+               { kind: 'tasklib/not-implemented',
+                 msg: msg,
+                 details: {} } }
     # This needs to be done before the process that exits is run
-    expect(STDOUT).to receive(:print).with(out)
+    expect(STDOUT).to receive(:print).with(result.to_json)
 
     begin
       EmptyTask.run
@@ -53,10 +55,11 @@ end
 describe 'ErrorTask' do
   it 'raises an error' do
     allow(STDIN).to receive(:read).and_return('{"name": "Lucy"}')
-    out = '{"kind":"task/error-kind",' \
-      '"msg":"task error message","details":"Additional details"}'
+    result = { _error: { kind: 'task/error-kind',
+                         msg: 'task error message',
+                         details: 'Additional details' } }
     # This needs to be done before the process that exits is run
-    expect(STDOUT).to receive(:print).with(out)
+    expect(STDOUT).to receive(:print).with(result.to_json)
 
     begin
       ErrorTask.run
