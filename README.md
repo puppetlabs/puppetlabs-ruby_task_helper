@@ -37,16 +37,16 @@ Add it to your [task metadata](https://puppet.com/docs/bolt/latest/writing_tasks
 
 When writing your task include the library in your script, extend the `TaskHelper` module, and write the `task()` function. The `task()` function should accept its parameters as symbols, and should return a hash. The following is an example of a task that uses the library. All parameters will be symbolized including nested hash keys and hashes contained in arrays.
 
-`mymodule/tasks/task.rb`
+`mymodule/tasks/mytask.rb`
 ```
 #!/usr/bin/env ruby
 
 require_relative "../../ruby_task_helper/files/task_helper.rb"
 
 class MyClass < TaskHelper
-  def task(name: nil, **kwargs) 
+  def task(name: nil, **kwargs)
     {greeting: "Hi, my name is #{name}"}
-  end 
+  end
 end
 
 if __FILE__ == $0
@@ -66,4 +66,26 @@ class MyTask < TaskHelper
     raise TaskHelper::Error.new("my task error message",
                                "mytask/error-kind",
                                "Additional details")
+```
+
+## Testing
+
+By implementing the task as a method and not executing the task as a script
+unless it is invoked directly it becomes much easier to write rspec tests for
+your task. Make sure the task helper repo is checked out next to your module so
+the relative requires work and you can write simple unit tests for the methods
+of your task.
+
+`mymodule/spec/mytask_spec.rb`
+```ruby
+require_relative '../tasks/mytask.rb'
+
+describe 'MyTask' do
+  let(:params) { { name: 'Lucy' } }
+  let(:task) { MyTask.new() }
+
+  it 'runs my task' do
+    expect(task.task(params)).to eq({greeting: 'Hi, my name is Lucy'})
+  end
+end
 ```
