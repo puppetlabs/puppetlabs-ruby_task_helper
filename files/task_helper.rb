@@ -1,8 +1,8 @@
 require 'json'
 
 class TaskHelper
-  @@params = nil
-  
+  @@params = nil # rubocop:disable Style/ClassVars
+
   class Error < RuntimeError
     attr_reader :kind, :details, :issue_code
 
@@ -53,14 +53,16 @@ class TaskHelper
   end
 
   def self.params
+    # rubocop:disable Style/ClassVars
     return @@params if @@params
     input = STDIN.read
     @@params = walk_keys(JSON.parse(input))
+    # rubocop:enable Style/ClassVars
   end
-  
+
   def self.run
     add_module_lib_paths(params[:_installdir])
-    
+
     # This method accepts a hash of parameters to run the task, then executes
     # the task. Unhandled errors are caught and turned into an error result.
     # @param [Hash] params A hash of params for the task
