@@ -26,7 +26,14 @@ class TaskHelper
   # Adds the <module>/lib/ directory for all modules in the _installdir.
   # This eases the pain for module authors when writing tasks that utilize
   # code in the lib/ directory that `require` files also in that same lib/ directory.
-  def self.add_module_lib_paths(install_dir)
+  def self.add_module_lib_paths(install_dir=ENV['PT__installdir'])
+    if install_dir.nil?
+      error = TaskHelper::Error.new('"PT__installdir" environment variable was not set. You should try setting "input": "both" in your task metadata JSON file.',
+                                    'ArgumentError')
+      STDOUT.print({ _error: error.to_h }.to_json)
+      exit 1
+    end
+
     Dir.glob(File.join([install_dir, '*'])).each do |mod|
       $LOAD_PATH << File.join([mod, 'lib'])
     end
