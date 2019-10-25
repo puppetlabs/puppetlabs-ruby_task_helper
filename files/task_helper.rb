@@ -1,6 +1,8 @@
 require 'json'
 
 class TaskHelper
+  @@params = nil # rubocop:disable Style/ClassVars
+
   class Error < RuntimeError
     attr_reader :kind, :details, :issue_code
 
@@ -23,6 +25,18 @@ class TaskHelper
     raise TaskHelper::Error.new(msg, 'tasklib/not-implemented')
   end
 
+  # Adds the <module>/lib/ directory for all modules in the _installdir.
+  # This eases the pain for module authors when writing tasks that utilize
+  # code in the lib/ directory that `require` files also in that same lib/
+  # directory.
+  def self.add_module_lib_paths(install_dir = nil)
+    # load install_dir from params (STDIN) if it isn't passed in
+    install_dir ||= params[:_installdir]
+    Dir.glob(File.join([install_dir, '*'])).each do |mod|
+      $LOAD_PATH << File.join([mod, 'lib'])
+    end
+  end
+
   # Accepts a Data object and returns a copy with all hash keys
   # symbolized.
   def self.walk_keys(data)
@@ -38,9 +52,16 @@ class TaskHelper
     end
   end
 
-  def self.run
+  def self.params
+    # rubocop:disable Style/ClassVars
+    return @@params if @@params
     input = STDIN.read
-    params = walk_keys(JSON.parse(input))
+    @@params = walk_keys(JSON.parse(input))
+    # rubocop:enable Style/ClassVars
+  end
+
+  def self.run
+    add_module_lib_paths(params[:_installdir])
 
     # This method accepts a hash of parameters to run the task, then executes
     # the task. Unhandled errors are caught and turned into an error result.
