@@ -1,6 +1,8 @@
 require 'json'
 
 class TaskHelper
+  @@params = nil
+  
   class Error < RuntimeError
     attr_reader :kind, :details, :issue_code
 
@@ -27,15 +29,9 @@ class TaskHelper
   # This eases the pain for module authors when writing tasks that utilize
   # code in the lib/ directory that `require` files also in that same lib/
   # directory.
-  def self.add_module_lib_paths(install_dir = ENV['PT__installdir'])
-    if install_dir.nil?
-      msg = '"PT__installdir" environment variable was not set. You should try'\
-            'setting "input": "both" in your task metadata JSON file.'
-      error = TaskHelper::Error.new(msg, 'ArgumentError')
-      STDOUT.print({ _error: error.to_h }.to_json)
-      exit 1
-    end
-
+  def self.add_module_lib_paths(install_dir = nil)
+    # load install_dir from params (STDIN) if it isn't passed in
+    install_dir ||= params[:_installdir]
     Dir.glob(File.join([install_dir, '*'])).each do |mod|
       $LOAD_PATH << File.join([mod, 'lib'])
     end
@@ -56,11 +52,15 @@ class TaskHelper
     end
   end
 
-  def self.run
+  def self.params
+    return @@params if @@params
     input = STDIN.read
-    params = walk_keys(JSON.parse(input))
-    add_module_lib_paths(params[:_installdir]) if params[:_installdir]
-
+    @@params = walk_keys(JSON.parse(input))
+  end
+  
+  def self.run
+    add_module_lib_paths(params[:_installdir])
+    
     # This method accepts a hash of parameters to run the task, then executes
     # the task. Unhandled errors are caught and turned into an error result.
     # @param [Hash] params A hash of params for the task
