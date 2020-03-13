@@ -8,6 +8,8 @@ A Ruby helper library for writing [Puppet tasks](https://puppet.com/docs/bolt/la
 1. [Requirements](#requirements)
 1. [Setup](#setup)
 1. [Usage](#usage)
+1. [Debugging](#debugging)
+1. [Testing](#testing)
 
 ## Description
 
@@ -21,12 +23,12 @@ This library works with Ruby 2.3 and later.
 
 To use this library, include this module in a [Puppetfile](https://puppet.com/docs/pe/2019.0/puppetfile.html):
 
-```
+```ruby
 mod 'puppetlabs-ruby_task_helper'
 ```
 
 Add it to your [task metadata](https://puppet.com/docs/bolt/latest/writing_tasks.html#concept-677)
-```
+```json
 {
   "files": ["ruby_task_helper/files/task_helper.rb"],
   "input_method": "stdin"
@@ -38,7 +40,7 @@ Add it to your [task metadata](https://puppet.com/docs/bolt/latest/writing_tasks
 When writing your task include the library in your script, extend the `TaskHelper` module, and write the `task()` function. The `task()` function should accept its parameters as symbols, and should return a hash. The following is an example of a task that uses the library. All parameters will be symbolized including nested hash keys and hashes contained in arrays.
 
 `mymodule/tasks/mytask.rb`
-```
+```ruby
 #!/usr/bin/env ruby
 
 require_relative "../../ruby_task_helper/files/task_helper.rb"
@@ -55,17 +57,40 @@ end
 ```
 
 You can then run the task like any other Bolt task:
-```
+```bash
 bolt task run mymodule::task -n target.example.com name="Robert'); DROP TABLE Students;--"
 ```
 
 You can additionally provide detailed errors by raising a `TaskError`, such as
-```
+```ruby
 class MyTask < TaskHelper
   def task(**kwargs)
     raise TaskHelper::Error.new("my task error message",
                                "mytask/error-kind",
                                "Additional details")
+```
+
+## Debugging
+
+When writing your task, it can be helpful to write debugging statement to locate
+the source of any errors. The library includes a `debug` method that accepts arbitrary
+values and logs it as a debugging statement. If the task errors, the list of
+debugging statements will be included in the resulting `TaskError`.
+
+The list of debugging statements can also be accessed from the task itself by calling
+the `debug_statements` method. This can be used to include the debugging statements in
+a `TaskError` that you explicitly raise.
+
+Adding a debugging statement:
+```ruby
+debug "Result of method call: #{result}
+```
+
+Adding the list of debugging statements to a `TaskError`:
+```ruby
+raise TaskHelper::Error.new("my task error message",
+                            "mytask/error-kind",
+                            "debug" => debug_statements)
 ```
 
 ## Testing

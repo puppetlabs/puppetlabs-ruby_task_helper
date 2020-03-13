@@ -1,6 +1,8 @@
 require 'json'
 
 class TaskHelper
+  attr_reader :debug_statements
+
   class Error < RuntimeError
     attr_reader :kind, :details, :issue_code
 
@@ -12,10 +14,15 @@ class TaskHelper
     end
 
     def to_h
-      { 'kind' =>  kind,
+      { 'kind' => kind,
         'msg' => message,
         'details' => details }
     end
+  end
+
+  def debug(statement)
+    @debug_statements ||= []
+    @debug_statements << statement
   end
 
   def task(params = {})
@@ -46,7 +53,8 @@ class TaskHelper
     # the task. Unhandled errors are caught and turned into an error result.
     # @param [Hash] params A hash of params for the task
     # @return [Hash] The result of the task
-    result = new.task(params)
+    task   = new
+    result = task.task(params)
 
     if result.class == Hash
       STDOUT.print JSON.generate(result)
@@ -57,7 +65,12 @@ class TaskHelper
     STDOUT.print({ _error: e.to_h }.to_json)
     exit 1
   rescue StandardError => e
-    error = TaskHelper::Error.new(e.message, e.class.to_s, e.backtrace)
+    details = {
+      'backtrace' => e.backtrace,
+      'debug' => task.debug_statements
+    }.compact
+
+    error = TaskHelper::Error.new(e.message, e.class.to_s, details)
     STDOUT.print({ _error: error.to_h }.to_json)
     exit 1
   end
