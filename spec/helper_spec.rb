@@ -11,6 +11,14 @@ class ErrorTask < TaskHelper
   end
 end
 
+class DebugTask < TaskHelper
+  def task(name: nil)
+    debug('debugging statement')
+    debug('another debugging statement')
+    raise StandardError, 'There was an error'
+  end
+end
+
 class EchoTask < TaskHelper
   def task(name: nil)
     { 'result': "Hi, my name is #{name}" }
@@ -67,6 +75,24 @@ describe 'ErrorTask' do
       expect(e.status).to eq(1)
     else
       raise 'The ErrorTask test did not exit 1 as expected'
+    end
+  end
+end
+
+describe 'DebugTask' do
+  it 'raises an error with debugging statements' do
+    allow(STDIN).to receive(:read).and_return('{"name": "Tom"}')
+    regex = /\[\"debugging statement\",\"another debugging statement\"\]/
+
+    # This needs to be done before the process that exits is run
+    expect(STDOUT).to receive(:print).with(regex)
+
+    begin
+      DebugTask.run
+    rescue SystemExit => e
+      expect(e.status).to eq(1)
+    else
+      raise 'The DebugTask test did not exit 1 as expected'
     end
   end
 end
