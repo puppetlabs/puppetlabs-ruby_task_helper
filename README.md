@@ -58,7 +58,7 @@ end
 
 You can then run the task like any other Bolt task:
 ```bash
-bolt task run mymodule::task -n target.example.com name="Robert'); DROP TABLE Students;--"
+bolt task run mymodule::task -t target.example.com name="Robert'); DROP TABLE Students;--"
 ```
 
 You can additionally provide detailed errors by raising a `TaskError`, such as
