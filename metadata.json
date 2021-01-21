@@ -4,7 +4,7 @@
   "author": "Puppet, Inc.",
   "summary": "A helper for writing tasks in ruby",
   "license": "Apache-2.0",
-  "source": "git@github.com/puppetlabs/puppetlabs-ruby_task_helper",
+  "source": "https://github.com/puppetlabs/puppetlabs-ruby_task_helper",
   "dependencies": [
 
   ],
