@@ -17,7 +17,7 @@ This library handles parsing JSON input, serializing the result as JSON output, 
 
 ## Requirements
 
-This library works with Ruby 2.3 and later.
+This library works with Ruby 2.3 and later, though is tested using Ruby 2.4 and 2.5.
 
 ## Setup
 

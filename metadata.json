@@ -1,6 +1,6 @@
 {
   "name": "puppetlabs-ruby_task_helper",
-  "version": "0.5.1",
+  "version": "0.6.0",
   "author": "Puppet, Inc.",
   "summary": "A helper for writing tasks in ruby",
   "license": "Apache-2.0",
@@ -57,7 +57,7 @@
   "requirements": [
     {
       "name": "puppet",
-      "version_requirement": ">= 4.7.0 < 6.0.0"
+      "version_requirement": ">= 4.7.0 < 8.0.0"
     }
   ],
   "pdk-version": "1.7.0",

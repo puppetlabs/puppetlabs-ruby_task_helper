@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## Release 0.6.0
+
+### New features
+
+* Increase maximum Puppet version to Puppet 8, making the module usable with Puppet 7.
+
 ## Release 0.5.1
 
 ### New features
