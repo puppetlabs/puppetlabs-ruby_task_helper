@@ -1,4 +1,4 @@
-require_relative '../files/task_helper.rb'
+require_relative '../files/task_helper'
 require 'json'
 
 class EmptyTask < TaskHelper; end
@@ -41,14 +41,14 @@ end
 
 describe 'EmptyTask' do
   it 'returns no method when task() is not provided' do
-    allow(STDIN).to receive(:read).and_return('{"name": "Lucy"}')
+    allow($stdin).to receive(:read).and_return('{"name": "Lucy"}')
     msg = 'The task author must implement the `task` method in the task'
     result = { _error:
                { kind: 'tasklib/not-implemented',
                  msg: msg,
                  details: {} } }
     # This needs to be done before the process that exits is run
-    expect(STDOUT).to receive(:print).with(result.to_json)
+    expect($stdout).to receive(:print).with(result.to_json)
 
     begin
       EmptyTask.run
@@ -62,12 +62,12 @@ end
 
 describe 'ErrorTask' do
   it 'raises an error' do
-    allow(STDIN).to receive(:read).and_return('{"name": "Lucy"}')
+    allow($stdin).to receive(:read).and_return('{"name": "Lucy"}')
     result = { _error: { kind: 'task/error-kind',
                          msg: 'task error message',
                          details: 'Additional details' } }
     # This needs to be done before the process that exits is run
-    expect(STDOUT).to receive(:print).with(result.to_json)
+    expect($stdout).to receive(:print).with(result.to_json)
 
     begin
       ErrorTask.run
@@ -81,11 +81,11 @@ end
 
 describe 'DebugTask' do
   it 'raises an error with debugging statements' do
-    allow(STDIN).to receive(:read).and_return('{"name": "Tom"}')
-    regex = /\[\"debugging statement\",\"another debugging statement\"\]/
+    allow($stdin).to receive(:read).and_return('{"name": "Tom"}')
+    regex = /\["debugging statement","another debugging statement"\]/
 
     # This needs to be done before the process that exits is run
-    expect(STDOUT).to receive(:print).with(regex)
+    expect($stdout).to receive(:print).with(regex)
 
     begin
       DebugTask.run
@@ -99,9 +99,9 @@ end
 
 describe 'EchoTask' do
   it 'runs an echo task' do
-    allow(STDIN).to receive(:read).and_return('{"name": "Lucy"}')
+    allow($stdin).to receive(:read).and_return('{"name": "Lucy"}')
     out = JSON.dump('result' => 'Hi, my name is Lucy')
-    expect(STDOUT).to receive(:print).with(out)
+    expect($stdout).to receive(:print).with(out)
     EchoTask.run
   end
 end
@@ -115,13 +115,13 @@ describe 'SymbolizeTask' do
     # The task will only return these values if the keys
     # are properly symbolized.
     symbols = { nested_hash: 'foo', array_hash: 'bar' }
-    allow(STDIN).to receive(:read).and_return(JSON.dump(params))
+    allow($stdin).to receive(:read).and_return(JSON.dump(params))
     # In order to verify that symbolizing keys has not corrupted
     # the structure of the parameters the task returns the params
     # hash it received. This is merged with the result of looking
     # up the symbolized keys.
     out = JSON.dump('result' => JSON.dump(params.merge(symbols)))
-    expect(STDOUT).to receive(:print).with(out)
+    expect($stdout).to receive(:print).with(out)
     SymbolizeTask.run
   end
 end

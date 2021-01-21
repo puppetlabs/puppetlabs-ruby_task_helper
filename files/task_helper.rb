@@ -33,12 +33,13 @@ class TaskHelper
   # Accepts a Data object and returns a copy with all hash keys
   # symbolized.
   def self.walk_keys(data)
-    if data.is_a? Hash
+    case data
+    when Hash
       data.each_with_object({}) do |(k, v), acc|
         v = walk_keys(v)
         acc[k.to_sym] = v
       end
-    elsif data.is_a? Array
+    when Array
       data.map { |v| walk_keys(v) }
     else
       data
@@ -46,7 +47,7 @@ class TaskHelper
   end
 
   def self.run
-    input = STDIN.read
+    input = $stdin.read
     params = walk_keys(JSON.parse(input))
 
     # This method accepts a hash of parameters to run the task, then executes
@@ -56,13 +57,13 @@ class TaskHelper
     task   = new
     result = task.task(params)
 
-    if result.class == Hash
-      STDOUT.print JSON.generate(result)
+    if result.instance_of?(Hash)
+      $stdout.print JSON.generate(result)
     else
-      STDOUT.print result.to_s
+      $stdout.print result.to_s
     end
   rescue TaskHelper::Error => e
-    STDOUT.print({ _error: e.to_h }.to_json)
+    $stdout.print({ _error: e.to_h }.to_json)
     exit 1
   rescue StandardError => e
     details = {
@@ -71,7 +72,7 @@ class TaskHelper
     }.compact
 
     error = TaskHelper::Error.new(e.message, e.class.to_s, details)
-    STDOUT.print({ _error: error.to_h }.to_json)
+    $stdout.print({ _error: error.to_h }.to_json)
     exit 1
   end
 end
