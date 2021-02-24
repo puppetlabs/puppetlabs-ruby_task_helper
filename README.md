@@ -1,4 +1,4 @@
-# Ruby Task Helper
+## Ruby Task Helper
 
 A Ruby helper library for writing [Puppet tasks](https://puppet.com/docs/bolt/latest/writing_tasks.html). It provides a class that handles error generation, simplifies JSON input and output, and makes testing your task easier. It requires Bolt >= 1.1 or Puppet Enterprise >= 2019.0.
 
