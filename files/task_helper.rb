@@ -57,7 +57,7 @@ class TaskHelper
     task   = new
     result = task.task(params)
 
-    if result.instance_of?(Hash)
+    if result.instance_of?(Hash) || result.instance_of?(Array)
       $stdout.print JSON.generate(result)
     else
       $stdout.print result.to_s

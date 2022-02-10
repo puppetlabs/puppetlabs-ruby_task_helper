@@ -25,6 +25,14 @@ class EchoTask < TaskHelper
   end
 end
 
+class ArrayTask < TaskHelper
+  def task(name: nil)
+    [
+      { package: 'puppet-bolt', version: '3.20.0' }
+    ]
+  end
+end
+
 class SymbolizeTask < TaskHelper
   def task(params)
     # Test that the keys have been symbolized.
@@ -103,6 +111,15 @@ describe 'EchoTask' do
     out = JSON.dump('result' => 'Hi, my name is Lucy')
     expect($stdout).to receive(:print).with(out)
     EchoTask.run
+  end
+end
+
+describe 'ArrayTask' do
+  it 'returns valid JSON' do
+    allow($stdin).to receive(:read).and_return('{"name": "Lucy"}')
+    out = '[{"package":"puppet-bolt","version":"3.20.0"}]'
+    expect($stdout).to receive(:print).with(out)
+    ArrayTask.run
   end
 end
 
