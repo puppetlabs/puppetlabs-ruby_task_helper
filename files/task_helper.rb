@@ -55,7 +55,7 @@ class TaskHelper
     # @param [Hash] params A hash of params for the task
     # @return [Hash] The result of the task
     task   = new
-    result = task.task(params)
+    result = task.task(**params)
 
     if result.instance_of?(Hash)
       $stdout.print JSON.generate(result)
