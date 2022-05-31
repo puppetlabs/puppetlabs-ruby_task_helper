@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## Release 0.6.1
+
+### Bug fixes
+
+* Fix bug in task invocation for authors running bolt with a ruby 3 interpreter.
+
 ## Release 0.6.0
 
 ### New features
