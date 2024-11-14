@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## Release 1.0.0
+
+### Major changes
+
+* Module upgraded to be Puppet 8 compatible
+
 ## Release 0.6.1
 
 ### Bug fixes
