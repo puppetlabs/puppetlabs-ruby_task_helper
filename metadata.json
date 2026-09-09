@@ -1,6 +1,6 @@
 {
   "name": "puppetlabs-ruby_task_helper",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "author": "Puppet, Inc.",
   "summary": "A helper for writing tasks in ruby",
   "license": "Apache-2.0",
@@ -57,10 +57,10 @@
   "requirements": [
     {
       "name": "puppet",
-      "version_requirement": ">= 4.7.0 < 9.0.0"
+      "version_requirement": ">= 8.0.0 < 10.0.0"
     }
   ],
-  "pdk-version": "3.0.1",
-  "template-url": "https://github.com/puppetlabs/pdk-templates#3.0.1",
-  "template-ref": "tags/3.0.1-0-gd13288a"
+  "pdk-version": "3.6.1",
+  "template-url": "https://github.com/puppetlabs/pdk-templates.git#main",
+  "template-ref": "heads/main-0-gb7f9e32"
 }
