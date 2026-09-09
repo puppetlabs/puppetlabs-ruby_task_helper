@@ -1,11 +1,13 @@
-require_relative './mytask.rb'
+# frozen_string_literal: true
+
+require_relative 'mytask'
 # An example of testing a task using the helper
 
 describe 'MyTask' do
   let(:params) { { name: 'Lucy' } }
-  let(:task) { MyTask.new() }
+  let(:task) { MyTask.new }
 
   it 'runs my task' do
-    expect(task.task(params)).to eq({greeting: 'Hi, my name is Lucy'})
+    expect(task.task(params)).to eq({ greeting: 'Hi, my name is Lucy' })
   end
 end

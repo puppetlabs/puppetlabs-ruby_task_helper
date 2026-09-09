@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require_relative '../files/task_helper'
 require 'json'
 
@@ -21,7 +23,7 @@ end
 
 class EchoTask < TaskHelper
   def task(name: nil)
-    { 'result': "Hi, my name is #{name}" }
+    { result: "Hi, my name is #{name}" }
   end
 end
 
@@ -30,12 +32,12 @@ class SymbolizeTask < TaskHelper
     # Test that the keys have been symbolized.
     symbols = {
       nested_hash: params.dig(:top_level, :nested_key),
-      array_hash: params[:array_keys].first[:array_key]
+      array_hash: params[:array_keys].first[:array_key],
     }
     # Return the parameters merged with the symbols for
     # verification in test.
     result = params.merge(symbols)
-    { 'result': JSON.dump(result) }
+    { result: JSON.dump(result) }
   end
 end
 
@@ -82,7 +84,7 @@ end
 describe 'DebugTask' do
   it 'raises an error with debugging statements' do
     allow($stdin).to receive(:read).and_return('{"name": "Tom"}')
-    regex = /\["debugging statement","another debugging statement"\]/
+    regex = %r{\["debugging statement","another debugging statement"\]}
 
     # This needs to be done before the process that exits is run
     expect($stdout).to receive(:print).with(regex)
@@ -110,7 +112,7 @@ describe 'SymbolizeTask' do
   it 'recieves parameters hash with symbolized keys' do
     params = {
       'top_level' => { 'nested_key' => 'foo' },
-      'array_keys' => [{ 'array_key' => 'bar' }]
+      'array_keys' => [{ 'array_key' => 'bar' }],
     }
     # The task will only return these values if the keys
     # are properly symbolized.
