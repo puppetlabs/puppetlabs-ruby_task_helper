@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'json'
 
 class TaskHelper
@@ -25,7 +27,7 @@ class TaskHelper
     @debug_statements << statement
   end
 
-  def task(params = {})
+  def task(_params = {})
     msg = 'The task author must implement the `task` method in the task'
     raise TaskHelper::Error.new(msg, 'tasklib/not-implemented')
   end
@@ -68,7 +70,7 @@ class TaskHelper
   rescue StandardError => e
     details = {
       'backtrace' => e.backtrace,
-      'debug' => task.debug_statements
+      'debug' => task.debug_statements,
     }.compact
 
     error = TaskHelper::Error.new(e.message, e.class.to_s, details)

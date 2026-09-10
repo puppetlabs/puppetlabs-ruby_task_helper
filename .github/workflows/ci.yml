@@ -1,0 +1,28 @@
+name: "ci"
+
+on:
+  pull_request:
+    branches:
+      - "main"
+  pull_request_target:
+    types: [labeled, reopened]
+    branches:
+      - "main"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  Spec:
+    if: github.event_name != 'pull_request_target'
+    uses: "puppetlabs/cat-github-actions/.github/workflows/module_ci.yml@main"
+    secrets: "inherit"
+
+# No Acceptance job: this module has no spec/acceptance directory (task-only
+# module), so litmus:acceptance:parallel can never pass here regardless of
+# fixtures. Matches the puppetlabs/provision sibling module's convention.
