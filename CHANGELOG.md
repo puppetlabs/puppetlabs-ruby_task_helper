@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## Release 2.0.0
+
+### Major changes
+
+* Module upgraded to be Puppet 9 compatible
+
 ## Release 1.0.0
 
 ### Major changes
