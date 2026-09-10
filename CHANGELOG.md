@@ -13,83 +13,52 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 
 - (BOLT-193): ruby_task_helper pdk update to puppet 9 [#26](https://github.com/puppetlabs/puppetlabs-ruby_task_helper/pull/26) ([gavindidrichsen](https://github.com/gavindidrichsen))
 
-### Other
+## Release 1.0.0
 
-- CHANGELOG update [#27](https://github.com/puppetlabs/puppetlabs-ruby_task_helper/pull/27) ([gavindidrichsen](https://github.com/gavindidrichsen))
+### Major changes
 
-## [1.0.0](https://github.com/puppetlabs/puppetlabs-ruby_task_helper/tree/1.0.0) - 2024-11-14
+* Module upgraded to be Puppet 8 compatible
 
-[Full Changelog](https://github.com/puppetlabs/puppetlabs-ruby_task_helper/compare/0.6.1...1.0.0)
+## Release 0.6.1
 
-### Other
+### Bug fixes
 
-- Bump puppet to 8 [#24](https://github.com/puppetlabs/puppetlabs-ruby_task_helper/pull/24) ([adc-tdembski](https://github.com/adc-tdembski))
-- (maint) Release prep 0.6.1 [#22](https://github.com/puppetlabs/puppetlabs-ruby_task_helper/pull/22) ([donoghuc](https://github.com/donoghuc))
+* Fix bug in task invocation for authors running bolt with a ruby 3 interpreter.
 
-## [0.6.1](https://github.com/puppetlabs/puppetlabs-ruby_task_helper/tree/0.6.1) - 2022-05-31
+## Release 0.6.0
 
-[Full Changelog](https://github.com/puppetlabs/puppetlabs-ruby_task_helper/compare/0.6.0...0.6.1)
+### New features
 
-### Other
+* Increase maximum Puppet version to Puppet 8, making the module usable with Puppet 7.
 
-- (maint) Release prep 0.6.1 [#22](https://github.com/puppetlabs/puppetlabs-ruby_task_helper/pull/22) ([donoghuc](https://github.com/donoghuc))
-- (BOLT-1585) Support for ruby 3 [#21](https://github.com/puppetlabs/puppetlabs-ruby_task_helper/pull/21) ([donoghuc](https://github.com/donoghuc))
-- (maint) Add release workflow [#19](https://github.com/puppetlabs/puppetlabs-ruby_task_helper/pull/19) ([beechtom](https://github.com/beechtom))
-- (maint) Add code of conduct and contributing docs [#16](https://github.com/puppetlabs/puppetlabs-ruby_task_helper/pull/16) ([beechtom](https://github.com/beechtom))
+## Release 0.5.1
 
-## [0.6.0](https://github.com/puppetlabs/puppetlabs-ruby_task_helper/tree/0.6.0) - 2021-01-21
+### New features
 
-[Full Changelog](https://github.com/puppetlabs/puppetlabs-ruby_task_helper/compare/0.5.1...0.6.0)
+* Added a `debug` method to add debugging statements to the `details` field of a `TaskError`.
 
-### Other
+* Added a `debug_statements` method to retrieve the current list of debugging statements.
 
-- (maint) Bump maximum Puppet version, prep for 0.6.0 release [#15](https://github.com/puppetlabs/puppetlabs-ruby_task_helper/pull/15) ([lucywyman](https://github.com/lucywyman))
-- (maint) Auto-enable new cops, fix Rubocop warnings [#14](https://github.com/puppetlabs/puppetlabs-ruby_task_helper/pull/14) ([lucywyman](https://github.com/lucywyman))
-- Update README.md [#12](https://github.com/puppetlabs/puppetlabs-ruby_task_helper/pull/12) ([dshauver](https://github.com/dshauver))
+## Release 0.4.0
 
-## [0.5.1](https://github.com/puppetlabs/puppetlabs-ruby_task_helper/tree/0.5.1) - 2020-03-18
+### Bug fixes
 
-[Full Changelog](https://github.com/puppetlabs/puppetlabs-ruby_task_helper/compare/"0.5.0"...0.5.1)
+* Previously error hashes were not wrapped under an `_error` key causing bolt to ignore underlying error message. 
+  Now error hashes are wrapped under the expected `_error` key.
 
-### Other
+## Release 0.3.0
 
-- (maint) Prep 0.5.1 release [#11](https://github.com/puppetlabs/puppetlabs-ruby_task_helper/pull/11) ([lucywyman](https://github.com/lucywyman))
+### Bug fixes
 
-## ["0.5.0"](https://github.com/puppetlabs/puppetlabs-ruby_task_helper/tree/"0.5.0") - 2020-03-18
+* Previously only top level parameter keys were symbolized. Now nested keys are also symbolized.
 
-[Full Changelog](https://github.com/puppetlabs/puppetlabs-ruby_task_helper/compare/0.4.0..."0.5.0")
+## Release 0.2.0
 
-### Other
+### Bug fixes
 
-- Add 'debug' and 'debug_statements' methods [#10](https://github.com/puppetlabs/puppetlabs-ruby_task_helper/pull/10) ([beechtom](https://github.com/beechtom))
-- (DOCS) update example test to skip stdin/stdout and test the method directly [#8](https://github.com/puppetlabs/puppetlabs-ruby_task_helper/pull/8) ([adreyer](https://github.com/adreyer))
+* Helper files should go in the `files` directory of a module to prevent them from being added to the puppet 
+  ruby loadpath or seen as tasks.
 
-## [0.4.0](https://github.com/puppetlabs/puppetlabs-ruby_task_helper/tree/0.4.0) - 2019-09-04
+## Release 0.1.0
 
-[Full Changelog](https://github.com/puppetlabs/puppetlabs-ruby_task_helper/compare/0.3.0...0.4.0)
-
-### Other
-
-- (packaging) Prepare for the 0.4.0 release [#7](https://github.com/puppetlabs/puppetlabs-ruby_task_helper/pull/7) ([donoghuc](https://github.com/donoghuc))
-- Add codeowners [#6](https://github.com/puppetlabs/puppetlabs-ruby_task_helper/pull/6) ([donoghuc](https://github.com/donoghuc))
-- Wrap errors in _error key [#5](https://github.com/puppetlabs/puppetlabs-ruby_task_helper/pull/5) ([nicklewis](https://github.com/nicklewis))
-
-## [0.3.0](https://github.com/puppetlabs/puppetlabs-ruby_task_helper/tree/0.3.0) - 2019-02-21
-
-[Full Changelog](https://github.com/puppetlabs/puppetlabs-ruby_task_helper/compare/0.2.0...0.3.0)
-
-### Other
-
-- (BOLT-1053) Symbolize all keys for task params [#3](https://github.com/puppetlabs/puppetlabs-ruby_task_helper/pull/3) ([donoghuc](https://github.com/donoghuc))
-
-## [0.2.0](https://github.com/puppetlabs/puppetlabs-ruby_task_helper/tree/0.2.0) - 2018-12-13
-
-[Full Changelog](https://github.com/puppetlabs/puppetlabs-ruby_task_helper/compare/0.1.0...0.2.0)
-
-### Other
-
-- (maint) Helper files should live in `files` directory [#2](https://github.com/puppetlabs/puppetlabs-ruby_task_helper/pull/2) ([donoghuc](https://github.com/donoghuc))
-
-## [0.1.0](https://github.com/puppetlabs/puppetlabs-ruby_task_helper/tree/0.1.0) - 2018-10-26
-
-[Full Changelog](https://github.com/puppetlabs/puppetlabs-ruby_task_helper/compare/d0b5cb060307cfba621093b51efad3d28bc47cc6...0.1.0)
+This is the initial release.
