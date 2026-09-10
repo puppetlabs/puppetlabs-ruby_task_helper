@@ -1,6 +1,6 @@
 {
   "name": "puppetlabs-ruby_task_helper",
-  "version": "2.0.0",
+  "version": "1.0.1",
   "author": "Puppet, Inc.",
   "summary": "A helper for writing tasks in ruby",
   "license": "Apache-2.0",
